@@ -1,0 +1,180 @@
+.app-shell {
+  min-height: 100vh;
+  background: #f7f8fb;
+  color: #1f2937;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #dde3ea;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.app-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 2px;
+  color: #5c6675;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.app-header h1,
+.section-heading h1 {
+  margin: 0;
+  color: #172033;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.app-header h1 {
+  font-size: 28px;
+}
+
+.api-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 520px;
+  padding: 8px 12px;
+  border: 1px solid #d2dae5;
+  border-radius: 6px;
+  background: #f9fbfd;
+  color: #475569;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #118a4f;
+  flex: 0 0 auto;
+}
+
+.app-nav {
+  padding: 14px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #dde3ea;
+}
+
+.app-nav .nav-link {
+  color: #334155;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.app-nav .nav-link.active {
+  background: #14532d;
+  color: #ffffff;
+}
+
+.app-main {
+  padding: 28px 32px 40px;
+}
+
+.content-section {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.section-heading h1 {
+  font-size: 24px;
+}
+
+.table,
+.card {
+  border-color: #d9e1ea;
+}
+
+.table {
+  background: #ffffff;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.metric-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 0;
+}
+
+.metric-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid #e6ebf1;
+  padding-top: 10px;
+}
+
+.metric-list dt {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.metric-list dd {
+  margin: 0;
+  color: #172033;
+  font-weight: 700;
+  text-align: right;
+}
+
+.goal-text {
+  color: #334155;
+  font-weight: 600;
+}
+
+.exercise-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: #475569;
+}
+
+@media (max-width: 760px) {
+  .app-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .app-nav,
+  .app-main {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .api-status {
+    width: 100%;
+    max-width: none;
+  }
+}
