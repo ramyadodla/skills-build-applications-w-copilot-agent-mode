@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const apiUrl_1 = require("./config/apiUrl");
+const database_1 = require("./config/database");
 const activities_1 = __importDefault(require("./routes/activities"));
 const leaderboard_1 = __importDefault(require("./routes/leaderboard"));
 const teams_1 = __importDefault(require("./routes/teams"));
@@ -13,7 +13,6 @@ const users_1 = __importDefault(require("./routes/users"));
 const workouts_1 = __importDefault(require("./routes/workouts"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-const MONGODB_URI = process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/octofit_db';
 app.get('/api/health', (_req, res) => {
     res.json({ ok: true, service: 'octofit-backend', apiBaseUrl: apiUrl_1.apiBaseUrl });
 });
@@ -27,10 +26,9 @@ const errorHandler = (error, _req, res, _next) => {
     res.status(500).json({ error: 'Internal server error' });
 };
 app.use(errorHandler);
-mongoose_1.default
-    .connect(MONGODB_URI)
+(0, database_1.connectDatabase)()
     .then(() => {
-    console.log(`MongoDB connected at ${MONGODB_URI}`);
+    console.log(`MongoDB connected at ${database_1.MONGODB_URI}`);
     app.listen(apiUrl_1.PORT, () => {
         console.log(`API server listening on ${apiUrl_1.apiBaseUrl}`);
     });

@@ -1,7 +1,7 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import type { ErrorRequestHandler } from 'express';
 import { apiBaseUrl, PORT } from './config/apiUrl';
+import { connectDatabase, MONGODB_URI } from './config/database';
 import activitiesRouter from './routes/activities';
 import leaderboardRouter from './routes/leaderboard';
 import teamsRouter from './routes/teams';
@@ -10,8 +10,6 @@ import workoutsRouter from './routes/workouts';
 
 const app = express();
 app.use(express.json());
-
-const MONGODB_URI = process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/octofit_db';
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, service: 'octofit-backend', apiBaseUrl });
@@ -30,8 +28,7 @@ const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
 
 app.use(errorHandler);
 
-mongoose
-  .connect(MONGODB_URI)
+connectDatabase()
   .then(() => {
     console.log(`MongoDB connected at ${MONGODB_URI}`);
     app.listen(PORT, () => {
