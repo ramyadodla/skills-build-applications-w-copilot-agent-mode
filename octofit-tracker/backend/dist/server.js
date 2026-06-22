@@ -18,6 +18,11 @@ exports.apiBaseUrl = codespaceName
     : 'http://localhost:8000';
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
+exports.app.use((_req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 exports.app.get('/api/health', (_req, res) => {
     res.json({ ok: true, service: 'octofit-backend', apiBaseUrl: exports.apiBaseUrl });
 });
