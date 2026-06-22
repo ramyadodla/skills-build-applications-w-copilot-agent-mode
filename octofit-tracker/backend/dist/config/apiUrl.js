@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PORT = exports.apiBaseUrl = void 0;
-const PORT = Number(process.env.PORT ?? 8000);
+const PORT = 8000;
 exports.PORT = PORT;
 const codespaceName = process.env.CODESPACE_NAME;
 exports.apiBaseUrl = codespaceName
