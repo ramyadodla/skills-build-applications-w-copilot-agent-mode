@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
-import { fetchResource } from '../api';
+
+const usersApiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+  : 'http://localhost:8000/api/users/';
+
+function getUsersRecords(payload) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (Array.isArray(payload?.users)) {
+    return payload.users;
+  }
+
+  if (Array.isArray(payload?.results)) {
+    return payload.results;
+  }
+
+  if (Array.isArray(payload?.items)) {
+    return payload.items;
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data;
+  }
+
+  if (Array.isArray(payload?.data?.users)) {
+    return payload.data.users;
+  }
+
+  return [];
+}
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -7,9 +38,16 @@ function Users() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchResource('users')
-      .then((records) => {
-        setUsers(records);
+    fetch(usersApiEndpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed for users: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((payload) => {
+        setUsers(getUsersRecords(payload));
         setStatus('ready');
       })
       .catch((requestError) => {

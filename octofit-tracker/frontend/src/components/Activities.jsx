@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
-import { fetchResource } from '../api';
+
+const activitiesApiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/';
+
+function getActivitiesRecords(payload) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (Array.isArray(payload?.activities)) {
+    return payload.activities;
+  }
+
+  if (Array.isArray(payload?.results)) {
+    return payload.results;
+  }
+
+  if (Array.isArray(payload?.items)) {
+    return payload.items;
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data;
+  }
+
+  if (Array.isArray(payload?.data?.activities)) {
+    return payload.data.activities;
+  }
+
+  return [];
+}
 
 function Activities() {
   const [activities, setActivities] = useState([]);
@@ -7,9 +38,16 @@ function Activities() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchResource('activities')
-      .then((records) => {
-        setActivities(records);
+    fetch(activitiesApiEndpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed for activities: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((payload) => {
+        setActivities(getActivitiesRecords(payload));
         setStatus('ready');
       })
       .catch((requestError) => {

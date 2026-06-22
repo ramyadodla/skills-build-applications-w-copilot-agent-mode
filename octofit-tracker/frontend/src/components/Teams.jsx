@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
-import { fetchResource } from '../api';
+
+const teamsApiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+  : 'http://localhost:8000/api/teams/';
+
+function getTeamsRecords(payload) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (Array.isArray(payload?.teams)) {
+    return payload.teams;
+  }
+
+  if (Array.isArray(payload?.results)) {
+    return payload.results;
+  }
+
+  if (Array.isArray(payload?.items)) {
+    return payload.items;
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data;
+  }
+
+  if (Array.isArray(payload?.data?.teams)) {
+    return payload.data.teams;
+  }
+
+  return [];
+}
 
 function Teams() {
   const [teams, setTeams] = useState([]);
@@ -7,9 +38,16 @@ function Teams() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchResource('teams')
-      .then((records) => {
-        setTeams(records);
+    fetch(teamsApiEndpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed for teams: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((payload) => {
+        setTeams(getTeamsRecords(payload));
         setStatus('ready');
       })
       .catch((requestError) => {

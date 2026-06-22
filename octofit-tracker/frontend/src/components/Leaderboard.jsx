@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
-import { fetchResource } from '../api';
+
+const leaderboardApiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+  : 'http://localhost:8000/api/leaderboard/';
+
+function getLeaderboardRecords(payload) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (Array.isArray(payload?.leaderboard)) {
+    return payload.leaderboard;
+  }
+
+  if (Array.isArray(payload?.results)) {
+    return payload.results;
+  }
+
+  if (Array.isArray(payload?.items)) {
+    return payload.items;
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data;
+  }
+
+  if (Array.isArray(payload?.data?.leaderboard)) {
+    return payload.data.leaderboard;
+  }
+
+  return [];
+}
 
 function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -7,9 +38,16 @@ function Leaderboard() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchResource('leaderboard')
-      .then((records) => {
-        setLeaderboard(records);
+    fetch(leaderboardApiEndpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed for leaderboard: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((payload) => {
+        setLeaderboard(getLeaderboardRecords(payload));
         setStatus('ready');
       })
       .catch((requestError) => {

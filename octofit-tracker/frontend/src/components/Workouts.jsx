@@ -1,5 +1,36 @@
 import { useEffect, useState } from 'react';
-import { fetchResource } from '../api';
+
+const workoutsApiEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+  : 'http://localhost:8000/api/workouts/';
+
+function getWorkoutsRecords(payload) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (Array.isArray(payload?.workouts)) {
+    return payload.workouts;
+  }
+
+  if (Array.isArray(payload?.results)) {
+    return payload.results;
+  }
+
+  if (Array.isArray(payload?.items)) {
+    return payload.items;
+  }
+
+  if (Array.isArray(payload?.data)) {
+    return payload.data;
+  }
+
+  if (Array.isArray(payload?.data?.workouts)) {
+    return payload.data.workouts;
+  }
+
+  return [];
+}
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
@@ -7,9 +38,16 @@ function Workouts() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchResource('workouts')
-      .then((records) => {
-        setWorkouts(records);
+    fetch(workoutsApiEndpoint)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Request failed for workouts: ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((payload) => {
+        setWorkouts(getWorkoutsRecords(payload));
         setStatus('ready');
       })
       .catch((requestError) => {
