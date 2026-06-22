@@ -14,8 +14,8 @@ const workouts_1 = __importDefault(require("./routes/workouts"));
 const PORT = 8000;
 const codespaceName = process.env.CODESPACE_NAME;
 exports.apiBaseUrl = codespaceName
-    ? `https://${codespaceName}-${PORT}.app.github.dev`
-    : `http://localhost:${PORT}`;
+    ? `https://${codespaceName}-8000.app.github.dev`
+    : 'http://localhost:8000';
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
 exports.app.get('/api/health', (_req, res) => {
